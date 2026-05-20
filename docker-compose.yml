@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  backend:
+    image: peluqueria-backend:latest
+    ports:
+      - "8081:8081"

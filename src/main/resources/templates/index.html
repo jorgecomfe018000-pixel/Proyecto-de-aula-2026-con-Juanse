@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peluquería Diva Style</title>
+    <!-- Enlace a la hoja de estilos de Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos para la sección principal (Hero) con imagen de fondo */
+        .hero-section {
+            background-image: url(https://img.freepik.com/foto-gratis/peluqueria-femenina-haciendo-peinado-mujer-rubia-salon-belleza_176420-4450.jpg?w=1060&t=st=1662681770~exp=1662682370~hmac=88ff7759d70ef23a226126c98b30ea1aba0a66b33ce7c3bea2af442f4ac7615a);
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            padding: 150px 0;
+        }
+        /* Efecto de hover en las tarjetas de los servicios */
+        .service-card {
+            transition: transform 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+    /* Estilos para la sección principal (Hero) con imagen de fondo */
+    .hero-section {
+        background-image: url(https://img.freepik.com/foto-gratis/peluqueria-femenina-haciendo-peinado-mujer-rubia-salon-belleza_176420-4450.jpg?w=1060&t=st=1662681770~exp=1662682370~hmac=88ff7759d70ef23a226126c98b30ea1aba0a66b33ce7c3bea2af442f4ac7615a);
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        padding: 150px 0;
+    }
+    /* Efecto de hover en las tarjetas de los servicios */
+    .service-card {
+        transition: transform 0.3s;
+    }
+    .service-card:hover {
+        transform: translateY(-10px);
+    }
+    /* AGREGAR ESTO: */
+    .card-img-top {
+        height: 250px;
+        object-fit: cover;
+    }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación (Navbar) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Peluquería Diva Style</a>
+            <!-- Botón de menú para pantallas pequeñas -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Enlace a la página de inicio -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Inicio</a>
+                    </li>
+                    <!-- Enlaces para registrarse y/o iniciar sesión, solo si no hay usuario logueado -->
+                    <li class="nav-item" th:if="${clienteLogueado == null}">
+                        <a class="nav-link" href="/registro">Registrarse</a>
+                    </li>
+                    <li class="nav-item" th:if="${clienteLogueado == null}">
+                        <a class="nav-link" href="/login">Iniciar Sesión</a>
+                    </li>
+                    <!-- Enlaces de reserva y cierre de sesión, solo si hay un usuario logueado -->
+                    <li class="nav-item" th:if="${clienteLogueado != null}">
+                        <a class="nav-link" href="/reserva">Reservar</a>
+                    </li>
+                    <li class="nav-item" th:if="${clienteLogueado != null}">
+                        <a class="nav-link" th:href="@{/logout}">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sección Hero (principal) -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Peluquería Diva Style</h1>
+            <p class="lead">Glamour que inspira confianza.</p>
+            <!-- Botones de acción, que cambian dependiendo si hay un usuario logueado o no -->
+            <a th:if="${clienteLogueado == null}" href="/login" class="btn btn-primary btn-lg mt-3">Iniciar Sesión</a>
+            <a th:if="${clienteLogueado != null}" href="/reserva" class="btn btn-primary btn-lg mt-3">Reserva tu turno</a>
+        </div>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Nuestros Servicios</h2>
+            <div class="row">
+                <!-- Tarjetas para cada servicio ofrecido -->
+                <div class="col-md-4 mb-4">
+                    <div class="card service-card h-100">
+                        <img src=https://cdn.forbes.com.mx/2022/10/adam-winger-FkAZqQJTbXM-unsplash-e1665692343710-640x360.jpg class="card-img-top" alt="Corte de cabello">
+                        <div class="card-body">
+                            <h5 class="card-title">Transforma tu look</h5>
+                            <p class="card-text">Cortes de tendencia, asesoría de imagen y acabados profesionales que resaltan tu belleza natural.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card service-card h-100">
+                        <img src=https://tse1.mm.bing.net/th/id/OIP.vMXcP0-9k3FDw_ZoT6-LMQHaJQ?w=1440&h=1800&rs=1&pid=ImgDetMain&o=7&rm=3 class="card-img-top" alt="Afeitado">
+                        <div class="card-body">
+                            <h5 class="card-title">Color que brilla</h5>
+                            <p class="card-text">Especialistas en Balayage, Babylights y cobertura total con productos que protegen tu fibra capilar.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card service-card h-100">
+                        <img src=https://salerm.imgix.net/media/blog/header_images/hidratacion_o_nutricion_pelo_banner.jpg?auto=format&fit=max&w=1080&q=100 class="card-img-top" alt="Barba">
+                        <div class="card-body">
+                            <h5 class="card-title">Nutrición Profunda</h5>
+                            <p class="card-text">Hidratación intensiva, bótox capilar y keratina para un cabello sedoso, fuerte y sin frizz.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Llamado a la Acción -->
+    <section class="bg-dark text-white py-5">
+        <div class="container text-center">
+            <h2>¿Listo para un nuevo look?</h2>
+            <p class="lead">Reserva tu turno ahora y déjate atender por nuestros profesionales</p>
+            <!-- Botones de acción, que cambian dependiendo si hay un usuario logueado o no -->
+            <a th:if="${clienteLogueado == null}" href="/registro" class="btn btn-primary btn-lg mt-3">Registrarse</a>
+            <a th:if="${clienteLogueado != null}" href="/reserva" class="btn btn-primary btn-lg mt-3">Reservar Ahora</a>
+        </div>
+    </section>
+
+    <!-- Pie de página -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Información sobre la barbería -->
+                <div class="col-md-4">
+                    <h5>Peluquería Diva Style</h5>
+                    <p>Glamour que inspira confianza.</p>
+                </div>
+                <!-- Información de contacto -->
+                <div class="col-md-4">
+                    <h5>Contacto</h5>
+                    <p>Dirección: Av. Principal 123<br>
+                    Teléfono: (123) 456-7890<br>
+                    Email: info@peluqueriadivastyle.com</p>
+                </div>
+                <!-- Horarios de atención -->
+                <div class="col-md-4">
+                    <h5>Horarios</h5>
+                    <p>Lunes a Viernes: 9:00 AM - 8:00 PM<br>
+                    Sábados: 10:00 AM - 6:00 PM<br>
+                    Domingos: Cerrado</p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <p>&copy; 2026 Peluquería Diva Style. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Bootstrap para funcionalidades como navbar responsive -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

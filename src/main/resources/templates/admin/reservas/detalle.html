@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Reserva - Peluquería</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/admin/panel">Panel de Administración</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/admin/panel">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/estilistas">Estilistas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/turnos">Turnos</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/admin/reservas">Reservas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/reportes">Reportes</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> Admin
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/admin/perfil"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Detalle de Reserva</h1>
+            <a href="/admin/reservas" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver a la lista
+            </a>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Información de la Reserva</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>ID de Reserva:</strong> <span th:text="${reserva.idReserva}">1</span></p>
+                        <p><strong>Fecha de Reserva:</strong>
+                            <span th:text="${reserva.fechaHoraReserva != null ? #temporals.format(reserva.fechaHoraReserva, 'dd/MM/yyyy HH:mm') : 'N/A'}"></span>
+                        </p>
+                        <p><strong>Fecha del Turno:</strong>
+                            <span th:text="${reserva.fechaHoraTurno != null ? #temporals.format(reserva.fechaHoraTurno, 'dd/MM/yyyy HH:mm') : 'N/A'}"></span>
+                        </p>
+                        <p>
+                            <strong>Estado:</strong>
+                            <span th:if="${reserva.estado != null}"
+                                  th:class="${'badge ' + (reserva.estado.name() == 'PENDIENTE' ? 'bg-warning' : (reserva.estado.name() == 'COMPLETADA' ? 'bg-success' : 'bg-danger'))}"
+                                  th:text="${reserva.estado}">Estado</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Cliente:</strong> <span th:text="${reserva.cliente != null ? reserva.cliente.nombre : 'N/A'}">Cliente</span></p>
+                        <p><strong>Teléfono:</strong> <span th:text="${reserva.cliente != null ? reserva.cliente.telefono : 'N/A'}">Teléfono</span></p>
+                        <p><strong>Email:</strong> <span th:text="${reserva.cliente != null ? reserva.cliente.correo : 'N/A'}">Email</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Detalles del Servicio</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Estilista:</strong> <span th:text="${reserva.estilista != null ? reserva.estilista.nombre : 'N/A'}">Estilista</span></p>
+                        <p><strong>Especialidad:</strong> <span th:text="${reserva.estilista != null ? reserva.estilista.especialidad : 'N/A'}">Especialidad</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Servicio:</strong> <span th:text="${reserva.servicioBelleza != null ? reserva.servicioBelleza.nombre : 'N/A'}">Servicio</span></p>
+                        <p><strong>Precio:</strong> <span th:text="${reserva.servicioBelleza != null ? '$' + reserva.servicioBelleza.precio : 'N/A'}">$20.00</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4" th:if="${reserva.comentarios != null && !reserva.comentarios.isEmpty()}">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Comentarios</h5>
+            </div>
+            <div class="card-body">
+                <p th:text="${reserva.comentarios}">Comentarios del cliente</p>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+            <div>
+                <a th:if="${reserva.estado != null && reserva.estado.name() == 'PENDIENTE'}" 
+                   th:href="@{'/admin/reservas/completar/' + ${reserva.idReserva}}" 
+                   class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Marcar como Completada
+                </a>
+                <a th:if="${reserva.estado != null && reserva.estado.name() == 'PENDIENTE'}" 
+                   th:href="@{'/admin/reservas/cancelar/' + ${reserva.idReserva}}" 
+                   class="btn btn-warning">
+                    <i class="bi bi-x-circle"></i> Cancelar Reserva
+                </a>
+            </div>
+            <button type="button" 
+                    class="btn btn-danger"
+                    th:data-reserva-id="${reserva.idReserva}"
+                    th:data-cliente="${reserva.cliente != null ? reserva.cliente.nombre : 'N/A'}"
+                    th:data-fecha="${reserva.fechaHoraTurno != null ? #temporals.format(reserva.fechaHoraTurno, 'dd/MM/yyyy HH:mm') : 'N/A'}"
+                    onclick="mostrarModalEliminar(this)">
+                <i class="bi bi-trash"></i> Eliminar Reserva
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación de Eliminación -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-trash text-danger" style="font-size: 3rem;"></i>
+                    </div>
+                    <p class="text-center mb-3"><strong>¿Estás seguro de eliminar esta reserva?</strong></p>
+                    <div class="alert alert-warning">
+                        <small><i class="bi bi-info-circle me-1"></i>Esta acción no se puede deshacer</small>
+                    </div>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <p class="mb-2"><strong>Detalles de la reserva:</strong></p>
+                            <ul class="mb-0">
+                                <li><strong>ID:</strong> <span id="modalReservaId"></span></li>
+                                <li><strong>Cliente:</strong> <span id="modalCliente"></span></li>
+                                <li><strong>Fecha:</strong> <span id="modalFecha"></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Cancelar
+                    </button>
+                    <a id="btnConfirmarEliminar" href="#" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>Sí, Eliminar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Peluquería Diva Style - Panel de Administración</h5>
+                    <p>Sistema de gestión para administradores.</p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <p>&copy; 2026 Peluquería Diva Style. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function mostrarModalEliminar(button) {
+            const reservaId = button.getAttribute('data-reserva-id');
+            const cliente = button.getAttribute('data-cliente');
+            const fecha = button.getAttribute('data-fecha');
+            
+            document.getElementById('modalReservaId').textContent = reservaId;
+            document.getElementById('modalCliente').textContent = cliente;
+            document.getElementById('modalFecha').textContent = fecha;
+            
+            document.getElementById('btnConfirmarEliminar').setAttribute('href', '/admin/reservas/eliminar/' + reservaId);
+            
+            new bootstrap.Modal(document.getElementById('modalEliminar')).show();
+        }
+    </script>
+</body>
+</html>

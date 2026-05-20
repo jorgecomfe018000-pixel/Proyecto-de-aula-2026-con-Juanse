@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar Turnos - Peluquería</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/admin/panel">Panel de Administración</a>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Generar Turnos para <span th:text="${estilista.nombreCompleto}">estilista</span></h1>
+        <a th:href="@{/admin/estilistas}" class="btn btn-secondary">Volver</a>
+    </div>
+
+    <div th:if="${mensaje}" class="alert alert-success"> <span th:text="${mensaje}"></span></div>
+    <div th:if="${error}" class="alert alert-danger"> <span th:text="${error}"></span></div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">Generar Turnos Disponibles</div>
+        <div class="card-body">
+            <form th:action="@{'/admin/estilistas/' + ${estilista.idEstilista} + '/generar-turnos'}" method="post">
+                <!-- CSRF token: use safe-navigation to avoid Template errors when _csrf is not present -->
+                <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+                <div class="row g-3">
+                    <div class="col-md-5">
+                        <label class="form-label">Fecha inicio</label>
+                        <input type="date" class="form-control" name="fechaInicio" th:value="${fechaInicio}" required />
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">Fecha fin</label>
+                        <input type="date" class="form-control" name="fechaFin" th:value="${fechaFin}" required />
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Generar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">Turnos Disponibles</div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr><th>Fecha</th><th>Hora</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="t : ${turnosDisponibles}">
+                                <td th:text="${#temporals.format(t.fechaHora, 'dd/MM/yyyy')}">01/01/2025</td>
+                                <td th:text="${#temporals.format(t.fechaHora, 'HH:mm')}">10:00</td>
+                            </tr>
+                            <tr th:if="${turnosDisponibles.empty}">
+                                <td colspan="2" class="text-center">No hay turnos disponibles</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4" th:if="${turnosGenerados != null}">
+                <div class="card-header bg-info text-white">Turnos Generados Recientemente</div>
+                <div class="card-body">
+                    <p class="small text-muted">Se han generado <strong th:text="${#lists.size(turnosGenerados)}">0</strong> turnos.</p>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr><th>Fecha</th><th>Hora</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="t : ${turnosGenerados}">
+                                <td th:text="${#temporals.format(t.fechaHora, 'dd/MM/yyyy')}">01/01/2025</td>
+                                <td th:text="${#temporals.format(t.fechaHora, 'HH:mm')}">10:00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">Turnos No Disponibles</div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr><th>Fecha</th><th>Hora</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="t : ${turnosReservados}">
+                                <td th:text="${#temporals.format(t.fechaHora, 'dd/MM/yyyy')}">01/01/2025</td>
+                                <td th:text="${#temporals.format(t.fechaHora, 'HH:mm')}">10:00</td>
+                            </tr>
+                            <tr th:if="${turnosReservados.empty}">
+                                <td colspan="2" class="text-center">No hay turnos reservados</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
